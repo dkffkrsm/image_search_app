@@ -5,7 +5,7 @@
 1. ### Elasticsearch 실행
    Docker 혹은 로컬에서 Elasticsearch 인스턴스를 실행합니다.
    ```bash
-   docker-compose up -d  # 또는 직접 설치한 경우 elasticsearch 실행
+   docker-compose up --build 
    ```
 
 2. ### FastAPI 서버 실행
