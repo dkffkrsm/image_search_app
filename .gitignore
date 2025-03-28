@@ -1,0 +1,13 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.env
+venv/
+.env.*
+*.sqlite3
+data/
+__scrapy_cache__/
+scrapy.cfg
+*.log
+.u2net/

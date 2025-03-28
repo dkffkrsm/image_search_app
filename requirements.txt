@@ -1,0 +1,13 @@
+fastapi
+uvicorn
+elasticsearch
+python-multipart
+jinja2
+requests
+Pillow
+imagehash
+scrapy
+scrapy-splash
+opencv-python-headless
+rembg
+onnxruntime
