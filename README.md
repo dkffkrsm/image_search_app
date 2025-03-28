@@ -99,4 +99,6 @@
 
 ✅ **최종 결과:**  
 이미지 URL을 기반으로 유사한 이미지와 가격, 상품명을 정확하게 조회하는 데모 구현 완료!
-![Uploading image.png…]()
+
+![image](https://github.com/user-attachments/assets/77470f1d-1c0a-4313-955d-6eb794832b58)
+
