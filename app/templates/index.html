@@ -9,7 +9,7 @@
     <style>
       body {
         font-family: sans-serif;
-        max-width: 600px;
+        max-width: 700px;
         margin: 40px auto;
         padding: 20px;
       }
@@ -17,15 +17,39 @@
         width: 100%;
         padding: 8px;
         font-size: 1em;
+        margin-bottom: 10px;
       }
       button {
-        margin-top: 10px;
-        padding: 10px;
+        margin-top: 5px;
+        margin-right: 10px;
+        padding: 8px 12px;
         font-size: 1em;
         cursor: pointer;
       }
-      .result {
-        margin-top: 20px;
+      img {
+        border-radius: 6px;
+        margin-top: 8px;
+      }
+      ul {
+        padding-left: 0;
+        list-style: none;
+      }
+      li {
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .thumbnail {
+        width: 100px;
+        height: auto;
+        object-fit: cover;
+        border: 1px solid #ccc;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      }
+      .shop-logo {
+        height: 20px;
+        margin-top: 4px;
       }
     </style>
   </head>
@@ -35,7 +59,7 @@
     <script type="text/babel">
       function App() {
         const [url, setUrl] = React.useState("");
-        const [results, setResults] = React.useState(null);
+        const [results, setResults] = React.useState([]);
         const [loading, setLoading] = React.useState(false);
 
         const handleSearch = async (e) => {
@@ -45,12 +69,22 @@
           try {
             const response = await fetch(`/search?url=${encodeURIComponent(url)}`);
             const data = await response.json();
+            console.log("🔍 검색 결과:", data);
             setResults(data);
           } catch (err) {
             alert("검색 실패: " + err.message);
           } finally {
             setLoading(false);
           }
+        };
+
+        const sortByPrice = () => {
+          const sorted = [...results].sort((a, b) => {
+            const priceA = parseInt(a.price.replace(/[^0-9]/g, ""));
+            const priceB = parseInt(b.price.replace(/[^0-9]/g, ""));
+            return priceA - priceB;
+          });
+          setResults(sorted);
         };
 
         return (
@@ -63,27 +97,54 @@
                 onChange={(e) => setUrl(e.target.value)}
                 placeholder="이미지 URL을 입력하세요"
               />
+              <br />
               <button type="submit">검색</button>
+              {results.length > 0 && (
+                <button type="button" onClick={sortByPrice}>💸 가격순 정렬</button>
+              )}
             </form>
 
+            {url && (
+              <div style={{ marginTop: "20px" }}>
+                <strong>입력한 이미지:</strong><br />
+                <img src={url} alt="입력 이미지" width="150" />
+              </div>
+            )}
+
             {loading && <p>🔍 검색 중...</p>}
-            {results && (
+
+            {results.length > 0 && (
               <div className="result">
                 <h2>검색 결과</h2>
-                {results.length === 0 ? (
-                  <p>결과 없음 😢</p>
-                ) : (
-                  <ul>
-                    {results.map((item, idx) => (
-                      <li key={idx}>
-                        <img src={item.image_url} width="100" /><br />
+                <ul>
+                  {results.map((item, idx) => (
+                    <li key={idx}>
+                      <a href={item.image_url} target="_blank" rel="noopener noreferrer">
+                        <img
+                          src={item.image_url}
+                          alt={item.product_name}
+                          className="thumbnail"
+                        />
+                      </a>
+                      <div>
                         <strong>{item.product_name}</strong><br />
-                        <span>{item.price}</span>
-                      </li>
-                    ))}
-                  </ul>
-                )}
+                        <span>{item.price}</span><br />
+                        {item.shop_logo_url && (
+                          <img
+                            src={item.shop_logo_url}
+                            alt="쇼핑사 로고"
+                            className="shop-logo"
+                          />
+                        )}
+                      </div>
+                    </li>
+                  ))}
+                </ul>
               </div>
+            )}
+
+            {results.length === 0 && !loading && url && (
+              <p>❌ 유사한 이미지를 찾을 수 없습니다.</p>
             )}
           </div>
         );

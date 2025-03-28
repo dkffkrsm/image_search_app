@@ -4,6 +4,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse
 from app.api.search import router as search_router
 import app.core.indexing as indexing
+from fastapi.responses import FileResponse
 
 app = FastAPI()
 
@@ -17,7 +18,7 @@ templates = Jinja2Templates(directory="app/templates")
 # 🔹 루트 경로에서 index.html 렌더링
 @app.get("/", response_class=HTMLResponse)
 async def root(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
+    return FileResponse("app/templates/index.html")
 
 # 🔹 앱 시작 시 Elasticsearch에 demo_data 인덱싱
 @app.on_event("startup")

@@ -11,3 +11,4 @@ scrapy-splash
 opencv-python-headless
 rembg
 onnxruntime
+scikit-learn

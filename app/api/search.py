@@ -21,14 +21,12 @@ def search_similar_images(url: str):
         query_hashes = get_image_hashes(image)
         print("✅ 해시 생성 완료", query_hashes)
 
-        # Elasticsearch에서 최대 1000개 문서 가져오기
         all_docs = es.search(index="products", body={
             "size": 1000,
-            "_source": ["productName", "imageUrl", "price", "imageHashes", "shoppingSite"]
+            "_source": ["product_name", "image_url", "price", "shop_logo_url", "imageHashes"]
         })
 
-        # 해밍 거리 기반 필터링
-        threshold = 5  # 허용 해밍 거리
+        threshold = 5
         similar_docs = []
 
         for hit in all_docs["hits"]["hits"]:
@@ -36,7 +34,12 @@ def search_similar_images(url: str):
             for h1 in query_hashes:
                 for h2 in doc.get("imageHashes", []):
                     if hamming_distance(h1, h2) <= threshold:
-                        similar_docs.append(doc)
+                        similar_docs.append({
+                            "product_name": doc.get("product_name"),
+                            "image_url": doc.get("image_url"),
+                            "price": doc.get("price"),
+                            "shop_logo_url": doc.get("shop_logo_url"),
+                        })
                         break
                 else:
                     continue
@@ -48,3 +51,5 @@ def search_similar_images(url: str):
     except Exception as e:
         print("❌ 에러 발생:", str(e))
         return {"error": str(e)}
+
+
