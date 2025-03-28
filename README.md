@@ -91,7 +91,7 @@
 - SIFT 해시 생성 코드 구현 도움
 - Elasticsearch 유사도 검색 로직 점검
 - React 기반 UI 흐름 설계 조언
-- Git 오류 해결 및 README 구성 도움
+
 
 > AI 어시스턴트: OpenAI ChatGPT (2025년 3월 기준 최신 모델 사용)
 
@@ -99,3 +99,4 @@
 
 ✅ **최종 결과:**  
 이미지 URL을 기반으로 유사한 이미지와 가격, 상품명을 정확하게 조회하는 데모 구현 완료!
+![Uploading image.png…]()
